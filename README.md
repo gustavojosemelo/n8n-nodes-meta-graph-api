@@ -4,7 +4,7 @@ Custom n8n node for **Meta Graph API** with **automatic cursor pagination** and 
 
 > Automatically follows `next` cursors — no more manual loops in n8n.
 
-**[Português 🇧🇷](#português)** 
+**[Português 🇧🇷](#português)**
 
 ---
 
@@ -75,7 +75,7 @@ RUN cd /home/node/.n8n && npm install n8n-nodes-meta-graph-api
 ### Local development
 
 ```bash
-git clone https://github.com/nextcomunicacao/n8n-nodes-meta-graph-api.git
+git clone https://github.com/gustavojosemelo/n8n-nodes-meta-graph-api.git
 cd n8n-nodes-meta-graph-api
 npm install
 npm run build
@@ -267,7 +267,7 @@ The official node returns **only the first page**. This node:
 Pull requests are welcome! For major changes, open an issue first.
 
 ```bash
-git clone https://github.com/nextcomunicacao/n8n-nodes-meta-graph-api.git
+git clone https://github.com/gustavojosemelo/n8n-nodes-meta-graph-api.git
 cd n8n-nodes-meta-graph-api
 npm install
 npm run dev  # watch mode
@@ -478,4 +478,4 @@ MIT
 
 ---
 
-**Feito com ☕ por [Next Comunicação](https://github.com/nextcomunicacao)**
+**Feito com ☕ por [Next Comunicação](https://github.com/gustavojosemelo)**
