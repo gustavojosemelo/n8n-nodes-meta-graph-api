@@ -4,7 +4,7 @@ Custom n8n node for **Meta Graph API** with **automatic cursor pagination** and 
 
 > Automatically follows `next` cursors — no more manual loops in n8n.
 
-**[Português 🇧🇷](#português)**
+**[Português 🇧🇷](#português)** 
 
 ---
 
