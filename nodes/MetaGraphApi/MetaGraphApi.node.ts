@@ -315,6 +315,14 @@ export class MetaGraphApi implements INodeType {
 							'Whether to automatically retry when a connection error occurs (ECONNRESET, ETIMEDOUT, ECONNREFUSED). Retries up to 3 times with exponential backoff.',
 					},
 					{
+						displayName: 'Include Input Data',
+						name: 'includeInputData',
+						type: 'boolean',
+						default: false,
+						description:
+							'Whether to merge the input item data (from the previous node) into each output record. Useful to keep context like date ranges, account IDs, or any other data from upstream nodes.',
+					},
+					{
 						displayName: 'Output Mode',
 						name: 'outputMode',
 						type: 'options',
@@ -536,6 +544,10 @@ export class MetaGraphApi implements INodeType {
 
 				const batchInterval = (options.batchInterval as number) || 0;
 				const outputMode = (options.outputMode as string) || 'individual';
+				const includeInputData = (options.includeInputData as boolean) || false;
+
+				// ─── Capture input item data for merging ────
+				const inputItemData = includeInputData ? items[itemIndex].json : null;
 
 				let allData: any[] = [];
 				let pageCount = 0;
@@ -614,7 +626,10 @@ export class MetaGraphApi implements INodeType {
 						// Partial data recovery
 						if (allData.length > 0) {
 							for (const record of allData) {
-								returnItems.push({ json: record });
+								const outputJson = inputItemData
+									? { _inputData: inputItemData, ...record }
+									: record;
+								returnItems.push({ json: outputJson });
 							}
 							returnItems.push({
 								json: {
@@ -649,7 +664,10 @@ export class MetaGraphApi implements INodeType {
 
 					// ─── Collect data ───────────────────────
 					if (outputMode === 'raw' || !autoPagination) {
-						returnItems.push({ json: response });
+						const outputJson = inputItemData
+							? { _inputData: inputItemData, ...response }
+							: response;
+						returnItems.push({ json: outputJson });
 						break;
 					}
 
@@ -660,7 +678,10 @@ export class MetaGraphApi implements INodeType {
 						allData.push(response.data);
 					} else {
 						// No data field — response IS the data
-						returnItems.push({ json: response });
+						const outputJson = inputItemData
+							? { _inputData: inputItemData, ...response }
+							: response;
+						returnItems.push({ json: outputJson });
 						break;
 					}
 
@@ -685,7 +706,10 @@ export class MetaGraphApi implements INodeType {
 				// ─── Push individual items ──────────────────
 				if (outputMode === 'individual' && autoPagination && allData.length > 0) {
 					for (const record of allData) {
-						returnItems.push({ json: record });
+						const outputJson = inputItemData
+							? { _inputData: inputItemData, ...record }
+							: record;
+						returnItems.push({ json: outputJson });
 					}
 				}
 			} catch (error: any) {

@@ -284,6 +284,13 @@ class MetaGraphApi {
                             description: 'Whether to automatically retry when a connection error occurs (ECONNRESET, ETIMEDOUT, ECONNREFUSED). Retries up to 3 times with exponential backoff.',
                         },
                         {
+                            displayName: 'Include Input Data',
+                            name: 'includeInputData',
+                            type: 'boolean',
+                            default: false,
+                            description: 'Whether to merge the input item data (from the previous node) into each output record. Useful to keep context like date ranges, account IDs, or any other data from upstream nodes.',
+                        },
+                        {
                             displayName: 'Output Mode',
                             name: 'outputMode',
                             type: 'options',
@@ -453,6 +460,9 @@ class MetaGraphApi {
                     : 1;
                 const batchInterval = options.batchInterval || 0;
                 const outputMode = options.outputMode || 'individual';
+                const includeInputData = options.includeInputData || false;
+                // ─── Capture input item data for merging ────
+                const inputItemData = includeInputData ? items[itemIndex].json : null;
                 let allData = [];
                 let pageCount = 0;
                 let currentUrl = fullUrl;
@@ -522,7 +532,10 @@ class MetaGraphApi {
                         // Partial data recovery
                         if (allData.length > 0) {
                             for (const record of allData) {
-                                returnItems.push({ json: record });
+                                const outputJson = inputItemData
+                                    ? { _inputData: inputItemData, ...record }
+                                    : record;
+                                returnItems.push({ json: outputJson });
                             }
                             returnItems.push({
                                 json: {
@@ -552,7 +565,10 @@ class MetaGraphApi {
                     }
                     // ─── Collect data ───────────────────────
                     if (outputMode === 'raw' || !autoPagination) {
-                        returnItems.push({ json: response });
+                        const outputJson = inputItemData
+                            ? { _inputData: inputItemData, ...response }
+                            : response;
+                        returnItems.push({ json: outputJson });
                         break;
                     }
                     // Individual mode: extract data array
@@ -564,7 +580,10 @@ class MetaGraphApi {
                     }
                     else {
                         // No data field — response IS the data
-                        returnItems.push({ json: response });
+                        const outputJson = inputItemData
+                            ? { _inputData: inputItemData, ...response }
+                            : response;
+                        returnItems.push({ json: outputJson });
                         break;
                     }
                     // ─── Check for next page ────────────────
@@ -587,7 +606,10 @@ class MetaGraphApi {
                 // ─── Push individual items ──────────────────
                 if (outputMode === 'individual' && autoPagination && allData.length > 0) {
                     for (const record of allData) {
-                        returnItems.push({ json: record });
+                        const outputJson = inputItemData
+                            ? { _inputData: inputItemData, ...record }
+                            : record;
+                        returnItems.push({ json: outputJson });
                     }
                 }
             }

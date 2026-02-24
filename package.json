@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-meta-graph-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Custom n8n node for Meta Graph API with automatic cursor pagination and batching. No more loops needed. | Node customizado com paginação automática e batching.",
   "keywords": [
     "n8n-community-node-package",
