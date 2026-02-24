@@ -1,0 +1,53 @@
+{
+  "name": "n8n-nodes-meta-graph-api",
+  "version": "1.0.1",
+  "description": "Custom n8n node for Meta Graph API with automatic cursor pagination and batching. No more loops needed. | Node customizado com paginação automática e batching.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "meta",
+    "facebook",
+    "graph-api",
+    "instagram",
+    "ads",
+    "pagination",
+    "batching"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "author": {
+    "name": "Next Comunicação"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "lint": "tslint -p tsconfig.json -c tslint.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/MetaGraphApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/MetaGraphApi/MetaGraphApi.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "gulp": "^4.0.2",
+    "n8n-workflow": "*",
+    "typescript": "~5.3.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
